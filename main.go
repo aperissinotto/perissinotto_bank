@@ -1,0 +1,19 @@
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+func main() {
+	// Servir arquivos estáticos da pasta public
+	fs := http.FileServer(http.Dir("./public"))
+	http.Handle("/", fs)
+
+	// Rotas de API
+	http.HandleFunc("/api/login", HandleLogin)
+
+	// Iniciar servidor
+	log.Println("Servidor rodando em http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}

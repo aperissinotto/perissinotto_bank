@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perissinotto Bank</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <script type="module" src="./js/login.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img id=bull src="./images/bull.png" alt="bull">
+            <p class="gold-metal">Perissinotto Bank</p>
+            <img id=bear src="./images/bear.png" alt="bear">
+        </div>
+        <div class="body">
+            <form id="loginForm" action="" method="post">
+                <input type="text" name="agencia" id="agencia" placeholder="Digite seu código de agência" required>
+                <input type="text" name="conta" id="conta" placeholder="Digite seu número de conta" required>
+                <input type="password" name="senha" id="senha" placeholder="Digite sua senha" required>
+                <button type="submit" id="submit">Entrar</button>
+            </form>
+        </div>
+        <div class="footer">
+            <p id="mensagem">.</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -14,6 +14,7 @@ func main() {
 
 	// Rotas de API
 	http.HandleFunc("/api/login", HandleLogin)
+	http.HandleFunc("/api/cadastrar", HandleCadastro)
 
 	// Iniciar servidor
 	log.Println("Servidor rodando em http://localhost:8080")

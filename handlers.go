@@ -2,8 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type LoginRequest struct {
@@ -60,6 +63,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	id := uuid.New()
+	fmt.Println(id.String())
 	log.Printf("Login tentado - Agência: %s, Conta: %s", req.Agencia, req.Conta)
 
 	w.Header().Set("Content-Type", "application/json")

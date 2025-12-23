@@ -2,11 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
 type LoginRequest struct {
@@ -22,7 +19,6 @@ type LoginResponse struct {
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
@@ -63,9 +59,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := uuid.New()
-	fmt.Println(id.String())
 	log.Printf("Login tentado - Agência: %s, Conta: %s", req.Agencia, req.Conta)
+	// aqui vou acessar o postgresql para validar a senha
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

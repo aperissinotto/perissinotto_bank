@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	ConectarPostgres()
+	defer DB.Close()
 	// Servir arquivos estáticos da pasta public
 	fs := http.FileServer(http.Dir("./public"))
 	http.Handle("/", fs)

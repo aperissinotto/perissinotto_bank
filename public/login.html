@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perissinotto Bank</title>
     <link rel="stylesheet" href="./css/style.css">
+    <script type="module" src="./js/login.js" defer></script>
 </head>
 
 <body>
@@ -16,12 +17,12 @@
             <img class="logo" src="./images/bear.png" alt="bear">
         </div>
         <div class="body">
-            <a class="link" href="/login.html">
-                <button class="button" type="button">Entre em sua conta</button>
-            </a>
-            <a class="link" href="/cadastro.html">
-                <button class="button" type="button">Abra sua conta conosco</button>
-            </a>
+            <form class="form" action="" method="post">
+                <input class="text" type="text" name="agencia" id="agencia" placeholder="Agência" required>
+                <input class="text" type="text" name="conta" id="conta" placeholder="Conta" required>
+                <input class="text" type="password" name="senha" id="senha" placeholder="Senha" required>
+                <button class="button" type="submit" id="submit">Entrar</button>
+            </form>
         </div>
         <div class="footer">
             <p class="mensagem">.</p>

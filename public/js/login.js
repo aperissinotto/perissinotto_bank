@@ -1,19 +1,68 @@
+// Aguarda o carregamento completo do DOM (todos os elementos HTML)
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('#loginForm');
-    const btnEntrar = document.querySelector('#submit');
-    const mensagem = document.querySelector('#mensagem');
+    // Seleciona os elementos do HTML usando suas classes e IDs
+    const form = document.querySelector('.form'); // O formulário
+    const btnEntrar = document.querySelector('#submit'); // Botão de envio
+    const mensagem = document.querySelector('.mensagem'); // Área de mensagens
+    const inputAgencia = document.querySelector('#agencia'); // Campo de agência
+    const inputConta = document.querySelector('#conta'); // Campo de conta
+    const inputSenha = document.querySelector('#senha'); // Campo de senha
 
+    // Quando a página termina de carregar completamente, coloca o foco no campo de agência
+    window.addEventListener('load', () => {
+        inputAgencia.focus();
+    });
+
+    // Quando o campo de agência recebe foco (clique), exibe uma mensagem de ajuda
+    inputAgencia.addEventListener('focus', () => {
+        mensagem.innerHTML = 'Digite o número da agência da sua conta';
+    });
+
+    // Quando o campo de agência recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
+    inputAgencia.addEventListener('input', () => {
+        const regex = /^[0-9]*$/;
+        if (!regex.test(agencia.value)) {
+            mensagem.innerHTML = 'Agência inválida, só pode conter números!';
+        } else {
+            mensagem.innerHTML = 'Digite o número da agência da sua conta';
+        }
+    });
+
+    // Quando o campo de conta recebe foco, exibe uma mensagem de ajuda
+    inputConta.addEventListener('focus', () => {
+        mensagem.innerHTML = 'Digite o número da sua conta';
+    });
+
+    // Quando o campo de conta recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
+    inputConta.addEventListener('input', () => {
+        const regex = /^[0-9]*$/;
+        if (!regex.test(conta.value)) {
+            mensagem.innerHTML = 'Conta inválida, só pode conter números!';
+        } else {
+            mensagem.innerHTML = 'Digite o número da sua conta';
+        }
+    });
+
+    // Quando o campo de senha recebe foco, exibe uma mensagem de ajuda
+    inputSenha.addEventListener('focus', () => {
+        mensagem.innerHTML = 'Digite sua senha de acesso a sua conta';
+    });
+
+    // Quando o formulário é enviado (botão clicado)
     form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Impede o comportamento padrão do formulário
 
+        // Se o botão já está desabilitado, não faz nada (evita múltiplos cliques)
         if (btnEntrar.disabled) {
             return;
         }
 
         try {
+            // Desabilita o botão e muda o texto para indicar que está processando
             btnEntrar.disabled = true;
             btnEntrar.textContent = 'Entrando...';
 
+            // Coleta os dados do formulário
             const formData = new FormData(form);
             const data = {
                 agencia: formData.get('agencia'),
@@ -21,25 +70,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 senha: formData.get('senha')
             };
 
+            // Envia os dados para o servidor via requisição POST
             const response = await fetch('/api/login', {
-                method: 'POST',
+                method: 'POST', // Tipo de requisição
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json' // Indica que está enviando JSON
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data) // Converte os dados para JSON
             });
 
+            mensagem.innerHTML = 'Validando dados informados no Mainframe...';
+
+            // Aguarda e converte a resposta do servidor em JSON
             const result = await response.json();
 
+            // Se a requisição foi bem-sucedida (código 200, 201, etc)
             if (response.ok) {
                 mensagem.innerHTML = 'Login realizado com sucesso!';
-                console.log('Resposta do servidor:', result);
             } else {
+                // Se houve erro, exibe a mensagem de erro retornada pelo servidor
                 mensagem.innerHTML = `Erro: ${result.message || 'Login falhou'}`;
             }
         } catch (erro) {
+            // Se houver erro na comunicação com o servidor, exibe a mensagem de erro
             mensagem.innerHTML = `Erro na requisição: ${erro.message}`;
         } finally {
+            // Após tudo (sucesso ou erro), reabilita o botão e restaura o texto
             btnEntrar.disabled = false;
             btnEntrar.textContent = 'Entrar';
         }

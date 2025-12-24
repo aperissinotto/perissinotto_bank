@@ -1,4 +1,4 @@
-package main
+package auth
 
 import (
 	"crypto/rand"
@@ -27,7 +27,7 @@ func gerarSessionID() string {
 	return hex.EncodeToString(b)
 }
 
-func criarSessao(w http.ResponseWriter, contaID string) {
+func CriarSessao(w http.ResponseWriter, contaID string) {
 	sessionID := gerarSessionID()
 
 	sessionMutex.Lock()
@@ -42,7 +42,7 @@ func criarSessao(w http.ResponseWriter, contaID string) {
 	})
 }
 
-func obterContaDaSessao(r *http.Request) (string, bool) {
+func ObterContaDaSessao(r *http.Request) (string, bool) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		return "", false
@@ -55,7 +55,7 @@ func obterContaDaSessao(r *http.Request) (string, bool) {
 	return id, ok
 }
 
-func destruirSessao(w http.ResponseWriter, r *http.Request) {
+func DestruirSessao(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 	if err == nil {
 		sessionMutex.Lock()

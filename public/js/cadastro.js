@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputNomeCompleto = document.querySelector('#nomeCompleto'); // Campo de nome completo
     const inputDataNascimento = document.querySelector('#dataNascimento'); // Campo de data de nascimento
     const inputCep = document.querySelector('#cep'); // Campo de cep
+    const inputEndereco = document.querySelector('#endereco'); // Campo de endereço
 
     // Quando a página termina de carregar completamente, coloca o foco no campo de nome completo
     window.addEventListener('load', () => {
@@ -45,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
             mensagem.innerHTML = 'Cep inválido, pode conter apenas números';
         } else {
             mensagem.innerHTML = 'Digite o cep da sua rua';
+            fetch(`https://viacep.com.br/ws/${inputCep.value}/json/`)
+                .then((response) => response.json())
+                .then((json) => {
+                    inputEndereco.value = json.logradouro;
+                })
         }
     });
 

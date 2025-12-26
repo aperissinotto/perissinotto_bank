@@ -38,13 +38,13 @@
                 <div class="field">
                     <label>CPF</label>
                     <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00"
-                        pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF no formato 000.000.000-00"
+                        pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$" title="Digite um CPF no formato 000.000.000-00"
                         maxlength="14" required>
                 </div>
                 <div class="field">
                     <label>RG</label>
                     <input type="text" name="rg" id="rg" placeholder="00.000.000-0"
-                        pattern="\d{2}\.\d{3}\.\d{3}-[0-9Xx]" title="Digite um RG válido no formato 00.000.000-0"
+                        pattern="^\d{2}\.\d{3}\.\d{3}-[0-9Xx]$" title="Digite um RG válido no formato 00.000.000-0"
                         maxlength="12" required>
                 </div>
                 <div class="field">
@@ -73,13 +73,13 @@
                     <label>Senha</label>
                     <input type="password" name="senha" id="senha" title="Digite a senha desejada"
                         placeholder="Digite a senha desejada" minlength="8"
-                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}" required>
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required>
                 </div>
                 <div class="field">
                     <label>Confirme a senha</label>
                     <input type="password" name="senhaConfirmada" id="senhaConfirmada"
                         title="Repita a senha para confirmar" placeholder="Repita a senha desejada para confirmar"
-                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}" minlength="8"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" minlength="8"
                         required>
                 </div>
                 <div class="field">

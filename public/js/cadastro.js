@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputDataNascimento = document.querySelector('#dataNascimento'); // Campo de data de nascimento
     const inputCep = document.querySelector('#cep'); // Campo de cep
     const inputEndereco = document.querySelector('#endereco'); // Campo de endereço
+    const inputCpf = document.querySelector('#cpf'); // Campo de cpf
+    const inputRg = document.querySelector('#rg'); // Campo de RG
+    const inputBairro = document.querySelector('#bairro'); // Campo de Bairro
+    const inputCidade = document.querySelector('#cidade'); // Campo de Cidade
+    const inputEstado = document.querySelector('#estado'); // Campo de Estado
+    const inputRendaMensal = document.querySelector('#rendamensal'); // Campo de renda mensal
+    const inputEmail = document.querySelector('#email'); // Campo de e-mail
+    const inputSenha = document.querySelector('#senha'); // Campo de senha
+    const inputSenhaConfirmada = document.querySelector('senhaConfirmada'); // Campo de senha confirmada
 
     // Quando a página termina de carregar completamente, coloca o foco no campo de nome completo
     window.addEventListener('load', () => {
@@ -26,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Quando o campo de data de nascimento recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
     inputDataNascimento.addEventListener('input', () => {
-        const regex = /^((0[1-9]|[12][0-9]|3[01]))[/]((0[1-9]|1[012]))[/](\d{4})$/;
-        if (!regex.test(inputDataNascimento.value)) {
-            mensagem.innerHTML = 'Data de nascimento inválida, deve ser no formato DD(dia)/MM(mês)/AAAA(ano)!';
-        } else {
-            mensagem.innerHTML = 'Digite a sua data de nascimento com DD/MM/AAAA';
+        let value = inputDataNascimento.value.replace(/\D/g, ""); // remove tudo que não for número
+        if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d)/, "$1/$2");
         }
+        if (value.length > 5) {
+            value = value.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
+        }
+        inputDataNascimento.value = value;
     });
 
     // Quando o campo de cep recebe foco, exibe uma mensagem de ajuda
@@ -50,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then((response) => response.json())
                 .then((json) => {
                     inputEndereco.value = json.logradouro;
+                    inputBairro.value = json.bairro;
+                    inputCidade.value = json.localidade;
+                    inputEstado.value = json.estado;
                 })
         }
     });

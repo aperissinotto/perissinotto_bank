@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de novos clientes</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/cadastro.css">
     <script type="module" src="./js/cadastro.js" defer></script>
 </head>
 
@@ -19,12 +18,46 @@
         </div>
         <div class="body">
             <form class="form" action="" method="post">
-                <input class="text" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Nome Completo"
-                    required>
-                <input class="text" type="text" name="dataNascimento" id="dataNascimento"
-                    placeholder="Data de Nascimento" required>
-                <input class="text" type="text" name="cep" id="cep" placeholder="Cep" required>
-                <input class="text" type="text" name="endereco" id="endereco" placeholder="Endereço" required>
+                <div class="field">
+                    <label>Nome</label>
+                    <input type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Nome Completo" required>
+                </div>
+                <div class="field">
+                    <label>Data de nascimento</label>
+                    <input type="date" name="dataNascimento" id="dataNascimento" required>
+                </div>
+                <div class="field">
+                    <label>CPF</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required>
+                </div>
+                <div class="field">
+                    <label>RG</label>
+                    <input type="text" name="rg" id="rg" placeholder="00.000.000-0" required>
+                </div>
+                <div class="field">
+                    <label>CEP</label>
+                    <input type="text" name="cep" id="cep" placeholder="00000000" required>
+                </div>
+                <div class="field">
+                    <label>Endereço completo</label>
+                    <input type="text" name="endereco" id="endereco" placeholder="Rua, número" required>
+                </div>
+                <div class="field">
+                    <label>Bairro</label>
+                    <input type="text" name="bairro" id="bairro" required>
+                </div>
+                <div class="field">
+                    <label>Cidade</label>
+                    <input type="text" name="cidade" id="cidade" required>
+                </div>
+                <div class="field">
+                    <label>Estado</label>
+                    <input type="text" name="estado" id="estado" required>
+                </div>
+                <div class="field">
+                    <label>Rendimento mensal</label>
+                    <input type="text" name="rendimentoMensal" id="rendimentoMensal" placeholder="R$" required>
+                </div>
                 <button class="button" type="submit" id="submit">Cadastrar</button>
             </form>
         </div>

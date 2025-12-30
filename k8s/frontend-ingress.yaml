@@ -1,17 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: perissinotto-bank-ingress
+  name: perissinotto-bank-frontend
   namespace: dev-apps
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
-    - host: banco.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: perissinotto-bank-frontend
-                port:
-                  number: 80
+  - host: banco.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: perissinotto-bank-frontend
+            port:
+              number: 80

@@ -22,11 +22,11 @@ jobs:
       # Build e push do BACKEND
       - name: Build & Push Backend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/bank-backend:latest ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/bank-backend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-backend:latest ./backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-backend:latest
 
       # Build e push do FRONTEND
       - name: Build & Push Frontend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/bank-frontend:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/bank-frontend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-frontend:latest ./frontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-frontend:latest

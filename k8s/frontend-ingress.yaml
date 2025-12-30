@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: perissinotto-bank-ingress
+  namespace: dev-apps
+spec:
+  rules:
+    - host: banco.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: perissinotto-bank-frontend
+                port:
+                  number: 80

@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: perissinotto-bank-frontend
   namespace: dev-apps
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:

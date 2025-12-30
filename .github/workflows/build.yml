@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Build Docker Images for ARM64
 
 on:
   push:
@@ -19,14 +19,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build e push do BACKEND
-      - name: Build & Push Backend
+      # ============================
+      # Build & Push Backend ARM64
+      # ============================
+      - name: Build & Push Backend ARM64
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-backend:latest ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-backend:latest
+          docker buildx build \
+            --platform linux/arm64 \
+            -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-backend:latest \
+            ./backend \
+            --push
 
-      # Build e push do FRONTEND
-      - name: Build & Push Frontend
+      # ============================
+      # Build & Push Frontend ARM64
+      # ============================
+      - name: Build & Push Frontend ARM64
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-frontend:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-frontend:latest
+          docker buildx build \
+            --platform linux/arm64 \
+            -t ${{ secrets.DOCKER_USERNAME }}/perissinotto-bank-frontend:latest \
+            ./frontend \
+            --push

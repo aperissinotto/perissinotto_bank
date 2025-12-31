@@ -16,6 +16,11 @@ spec:
       containers:
         - name: backend
           image: aperissinotto/perissinotto-bank-backend:latest
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: db-secret
           ports:
             - containerPort: 8080
 ---

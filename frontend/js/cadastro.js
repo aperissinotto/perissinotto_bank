@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     inputRendaMensal.addEventListener('blur', () => {
-        const regex = /^R?\$?\s?\d{1,3}(\.\d{3})*(,\d{2})?$/;
+        const regex = /^\d+(\.\d{1,2})?$/;
         if (regex.test(inputRendaMensal.value)) {
             camposPreValidados |= FLAGS.rendaMensalValida;
         } else {

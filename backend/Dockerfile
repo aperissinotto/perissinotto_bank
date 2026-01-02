@@ -7,14 +7,15 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o app
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o app ./cmd/api
 
 # Imagem final mínima
-FROM gcr.io/distroless/base-debian13:nonroot
+FROM alpine:latest
 
 WORKDIR /app
+
 COPY --from=builder /app/app .
 
 EXPOSE 8080
-USER nonroot
+
 CMD ["./app"]

@@ -276,22 +276,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnCadastrar.disabled) {
             return;
         }
-        /*
+        
         try {
             // Desabilita o botão e muda o texto para indicar que está processando
             btnCadastrar.disabled = true;
-            btnCadastrar.textContent = 'Entrando...';
+            btnCadastrar.textContent = 'Cadastrando...';
             
             // Coleta os dados do formulário
             const formData = new FormData(form);
             const data = {
                 nomeCompleto: formData.get('nomeCompleto'),
+                email: formData.get('email'),
                 dataNascimento: formData.get('dataNascimento'),
-                cep: formData.get('cep')
+                cpf: formData.get('cpf'),
+                rg: formData.get('rg'),
+                cep: formData.get('cep'),
+                endereco: formData.get('endereco'),
+                bairro: formData.get('bairro'),
+                cidade: formData.get('cidade'),
+                estado: formData.get('estado'),
+                rendaMensal: formData.get('rendaMensal')
             };
 
             // Envia os dados para o servidor via requisição POST
-            const response = await fetch('/api/buscaCep', {
+            const response = await fetch('/api/clientes', {
                 method: 'POST', // Tipo de requisição
                 headers: {
                     'Content-Type': 'application/json' // Indica que está enviando JSON
@@ -319,7 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnCadastrar.disabled = false;
             btnCadastrar.textContent = 'Entrar';
         }
-        */
     });
 });
 

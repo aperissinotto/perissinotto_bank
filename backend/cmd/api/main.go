@@ -22,9 +22,9 @@ func main() {
 	contaHandler := httpHandler.NewHandler(contaService)
 	clienteHandler := httpHandler.NewClienteHandler(clienteService)
 
-	http.HandleFunc("/login", contaHandler.Login)
-	http.HandleFunc("/clientes", clienteHandler.CriarCliente)
-	http.HandleFunc("/clientes/buscar", clienteHandler.BuscarCliente)
+	http.HandleFunc("/api/login", contaHandler.Login)
+	http.HandleFunc("/api/clientes", clienteHandler.CriarCliente)
+	http.HandleFunc("/api/clientes/buscar", clienteHandler.BuscarCliente)
 
 	log.Println("Servidor rodando na porta 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

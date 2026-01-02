@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bairro: formData.get('bairro'),
                 cidade: formData.get('cidade'),
                 estado: formData.get('estado'),
-                rendaMensal: formData.get('rendaMensal')
+                rendaMensal: Number(formData.get('rendaMensal'))
             };
 
             // Envia os dados para o servidor via requisição POST

@@ -7,25 +7,28 @@ import (
 	"github.com/aperissinotto/perissinotto_bank/internal/application/service"
 	"github.com/aperissinotto/perissinotto_bank/internal/infrastructure/db"
 	"github.com/aperissinotto/perissinotto_bank/internal/infrastructure/repository"
-	httpHandler "github.com/aperissinotto/perissinotto_bank/internal/interfaces/http"
+	httpRouter "github.com/aperissinotto/perissinotto_bank/internal/interfaces/http"
+	"github.com/aperissinotto/perissinotto_bank/internal/interfaces/http/handler"
 )
 
 func main() {
+	// Banco
 	dbConn := db.Connect()
 
-	contaRepo := repository.NewContaRepository(dbConn)
+	// Repositories
 	clienteRepo := repository.NewClienteRepository(dbConn)
 
-	contaService := service.NewAuthService(contaRepo)
+	// Services
 	clienteService := service.NewClienteService(clienteRepo)
 
-	contaHandler := httpHandler.NewHandler(contaService)
-	clienteHandler := httpHandler.NewClienteHandler(clienteService)
+	// Handlers
+	clienteHandler := handler.NewClienteHandler(clienteService)
 
-	http.HandleFunc("/api/login", contaHandler.Login)
-	http.HandleFunc("/api/clientes", clienteHandler.CriarCliente)
-	http.HandleFunc("/api/clientes/buscar", clienteHandler.BuscarCliente)
+	// Router
+	router := httpRouter.NewRouter(
+		clienteHandler,
+	)
 
 	log.Println("Servidor rodando na porta 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

@@ -8,7 +8,7 @@ CREATE TABLE clientes (
     data_nascimento DATE NOT NULL,
 
     cpf CHAR(11) NOT NULL UNIQUE,
-    rg VARCHAR(20) NOT NULL,
+    rg CHAR(9) NOT NULL,
 
     cep CHAR(8) NOT NULL,
     endereco VARCHAR(100) NOT NULL,

@@ -102,17 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Quando o campo de cpf recebe foco (clique), exibe uma mensagem de ajuda
     inputCpf.addEventListener('focus', () => {
-        mensagem.innerHTML = 'Digite o seu CPF no formato 999.999.999-99';
+        mensagem.innerHTML = 'Digite o seu CPF no formato 99999999999';
     });
 
     // Quando o campo de cpf recebe dados (input), ajuda com preenchimento automatico
     inputCpf.addEventListener('input', () => {
         let value = inputCpf.value.replace(/\D/g, ""); // remove tudo que não for número
-
-        value = value.replace(/(\d{3})(\d)/, "$1.$2");
-        value = value.replace(/(\d{3})(\d)/, "$1.$2");
-        value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-
         inputCpf.value = value;
     });
 
@@ -120,38 +115,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (validarCPF(inputCpf.value)) {
             camposPreValidados |= FLAGS.cpfValido;
         } else {
-            mensagem.innerHTML = 'Digite o seu CPF no formato 999.999.999-99';
+            mensagem.innerHTML = 'Digite o seu CPF no formato 99999999999';
             camposPreValidados &= ~FLAGS.cpfValido;
         }
     });
 
     // Quando o campo de rg recebe foco (clique), exibe uma mensagem de ajuda
     inputRg.addEventListener('focus', () => {
-        mensagem.innerHTML = 'Digite o seu RG no formato 99.999.999-9';
+        mensagem.innerHTML = 'Digite o seu RG no formato 999999999';
     });
 
     // Quando o campo de rg recebe dados (input), ajuda com preenchimento automatico
     inputRg.addEventListener('input', () => {
         let value = inputRg.value.replace(/[^0-9Xx]/g, "").toUpperCase();
-
-        if (value.length > 2)
-            value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-
-        if (value.length > 6)
-            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-
-        if (value.length > 9)
-            value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})([0-9X])$/, "$1.$2.$3-$4");
-
         inputRg.value = value;
     });
 
     inputRg.addEventListener('blur', () => {
-        const regex = /^\d{2}\.\d{3}\.\d{3}-[0-9Xx]$/;
+        const regex = /^\d{8}[0-9A-Za-z]$/;
         if (regex.test(inputRg.value)) {
             camposPreValidados |= FLAGS.rgValido;
         } else {
-            mensagem.innerHTML = 'Digite o seu RG no formato 99.999.999-9';
+            mensagem.innerHTML = 'Digite o seu RG no formato 999999999';
             camposPreValidados &= ~FLAGS.rgValido;
         }
     });
@@ -332,8 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Algoritmo para validar o CPF
 function validarCPF(cpf) {
-    cpf = cpf.replace(/\D/g, '');
-
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
 
     let soma = 0;

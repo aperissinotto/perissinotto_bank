@@ -294,12 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             mensagem.innerHTML = 'Validando dados informados no Mainframe...';
 
+            // Aguarda e converte a resposta do servidor em JSON
+            const result = await response.json();
+
             // Se a requisição foi bem-sucedida (código 200, 201, etc)
             if (response.ok) {
                 mensagem.innerHTML = 'Cadastro realizado com sucesso!';
             } else {
                 // Se houve erro, exibe a mensagem de erro retornada pelo servidor
-                mensagem.innerHTML = `Erro: ${result.message || 'Login falhou'}`;
+                mensagem.innerHTML = `Erro: ${result.message || 'Cadastro falhou'}`;
             }
         } catch (erro) {
             // Se houver erro na comunicação com o servidor, exibe a mensagem de erro

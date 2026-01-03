@@ -19,8 +19,9 @@ func (r *ClienteRepositoryPostgres) Criar(c *entity.Cliente) error {
 		INSERT INTO clientes 
 		(nome_completo, email, data_nascimento, cpf, rg, cep, endereco, bairro, cidade, estado, renda_mensal)
 		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+		RETURNING id
 	`
-	_, err := r.db.Exec(
+	return r.db.QueryRow(
 		query,
 		c.NomeCompleto,
 		c.Email,
@@ -33,8 +34,7 @@ func (r *ClienteRepositoryPostgres) Criar(c *entity.Cliente) error {
 		c.Cidade,
 		c.Estado,
 		c.RendaMensal,
-	)
-	return err
+	).Scan(&c.ID)
 }
 
 func (r *ClienteRepositoryPostgres) BuscarPorID(id string) (*entity.Cliente, error) {

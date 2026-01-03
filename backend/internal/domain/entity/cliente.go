@@ -1,7 +1,9 @@
 package entity
 
+import "github.com/google/uuid"
+
 type Cliente struct {
-	ID             string
+	ID             uuid.UUID
 	NomeCompleto   string
 	Email          string
 	DataNascimento string

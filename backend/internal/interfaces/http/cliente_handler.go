@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/aperissinotto/perissinotto_bank/internal/application/service"
@@ -24,6 +25,7 @@ func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := h.service.CriarCliente(&c)
+	log.Println(err)
 	if err != nil {
 		http.Error(w, "Erro ao criar cliente", http.StatusInternalServerError)
 		return

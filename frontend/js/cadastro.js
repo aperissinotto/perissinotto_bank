@@ -295,8 +295,8 @@ document.addEventListener('DOMContentLoaded', () => {
             mensagem.innerHTML = 'Validando dados informados no Mainframe...';
 
             // Aguarda e converte a resposta do servidor em JSON
+            console.log(response);
             const result = await response.json();
-
             // Se a requisição foi bem-sucedida (código 200, 201, etc)
             if (response.ok) {
                 mensagem.innerHTML = 'Login realizado com sucesso!';

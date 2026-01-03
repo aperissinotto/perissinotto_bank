@@ -2,11 +2,10 @@ package http
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
+	"github.com/aperissinotto/perissinotto_bank/internal/application/dto"
 	"github.com/aperissinotto/perissinotto_bank/internal/application/service"
-	"github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 )
 
 type ClienteHandler struct {
@@ -18,20 +17,24 @@ func NewClienteHandler(s *service.ClienteService) *ClienteHandler {
 }
 
 func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
-	var c entity.Cliente
-	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+	var req dto.CriarClienteRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "JSON inválido", http.StatusBadRequest)
 		return
 	}
 
-	err := h.service.CriarCliente(&c)
-	log.Println(err)
+	cliente, err := h.service.CriarCliente(req)
+
 	if err != nil {
 		http.Error(w, "Erro ao criar cliente", http.StatusInternalServerError)
 		return
 	}
 
+	resp := dto.ClienteFromEntity(cliente)
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(resp)
 }
 
 func (h *ClienteHandler) BuscarCliente(w http.ResponseWriter, r *http.Request) {

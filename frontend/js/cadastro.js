@@ -32,6 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
         senhaConfirmadaValida: 1 << 9
     };
 
+    const CAMPOS_OBRIGATORIOS =
+        FLAGS.cepValido |
+        FLAGS.cpfValido |
+        FLAGS.dataNascimentoValida |
+        FLAGS.emailValido |
+        FLAGS.enderecoValido |
+        FLAGS.nomeCompletoValido |
+        FLAGS.rendaMensalValida |
+        FLAGS.rgValido |
+        FLAGS.senhaConfirmadaValida |
+        FLAGS.senhaValida;
+
     // Quando a página termina de carregar completamente, coloca o foco no campo de nome completo
     window.addEventListener('load', () => {
         inputNomeCompleto.focus();
@@ -42,33 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
         mensagem.innerHTML = 'Digite o seu nome completo';
     });
 
-    // Quando o campo de nome completo perde o foco, ele é validado
-    inputNomeCompleto.addEventListener('blur', () => {
-        const regex = /^.{30,80}$/;
-        if (regex.test(inputNomeCompleto.value)) {
-            inputNomeCompleto.value = inputNomeCompleto.value.toUpperCase();
-            camposPreValidados |= FLAGS.nomeCompletoValido;
-        } else {
-            mensagem.innerHTML = 'Digite o seu nome completo entre 30 e 80 caracteres';
-            camposPreValidados &= ~FLAGS.nomeCompletoValido;
-        }
-    });
-
     // Quando o campo de e-mail recebe foco (clique), exibe uma mensagem de ajuda
     inputEmail.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite o seu e-mail no formato email@exemplo.com.br';
-    });
-
-    // Quando o campo de e-mail perde o foco, ele é validado
-    inputEmail.addEventListener('blur', () => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (regex.test(inputEmail.value)) {
-            inputEmail.value = inputEmail.value.toUpperCase();
-            camposPreValidados |= FLAGS.emailValido;
-        } else {
-            mensagem.innerHTML = 'Digite o seu e-mail no formato email@exemplo.com.br';
-            camposPreValidados &= ~FLAGS.emailValido;
-        }
     });
 
     // Quando o campo de data de nascimento recebe foco, exibe uma mensagem de ajuda
@@ -88,18 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         inputDataNascimento.value = value;
     });
 
-    // Quando o campo de data de nascimento perde o foco, ele é validado
-    inputDataNascimento.addEventListener('blur', () => {
-        const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-        if (regex.test(inputDataNascimento.value)) {
-            camposPreValidados |= FLAGS.dataNascimentoValida;
-        } else {
-            mensagem.innerHTML = 'Digite a sua data de nascimento com DD/MM/AAAA';
-            camposPreValidados &= ~FLAGS.dataNascimentoValida;
-        }
-    });
-
-
     // Quando o campo de cpf recebe foco (clique), exibe uma mensagem de ajuda
     inputCpf.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite o seu CPF no formato 99999999999';
@@ -109,15 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     inputCpf.addEventListener('input', () => {
         let value = inputCpf.value.replace(/\D/g, ""); // remove tudo que não for número
         inputCpf.value = value;
-    });
-
-    inputCpf.addEventListener('blur', () => {
-        if (validarCPF(inputCpf.value)) {
-            camposPreValidados |= FLAGS.cpfValido;
-        } else {
-            mensagem.innerHTML = 'Digite o seu CPF no formato 99999999999';
-            camposPreValidados &= ~FLAGS.cpfValido;
-        }
     });
 
     // Quando o campo de rg recebe foco (clique), exibe uma mensagem de ajuda
@@ -131,16 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         inputRg.value = value;
     });
 
-    inputRg.addEventListener('blur', () => {
-        const regex = /^\d{8}[0-9A-Za-z]$/;
-        if (regex.test(inputRg.value)) {
-            camposPreValidados |= FLAGS.rgValido;
-        } else {
-            mensagem.innerHTML = 'Digite o seu RG no formato 999999999';
-            camposPreValidados &= ~FLAGS.rgValido;
-        }
-    });
-
     // Quando o campo de cep recebe foco, exibe uma mensagem de ajuda
     inputCep.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite o cep do seu endereço';
@@ -150,10 +107,33 @@ document.addEventListener('DOMContentLoaded', () => {
     inputCep.addEventListener('input', () => {
         let value = inputCep.value.replace(/\D/g, ""); // remove tudo que não for número
         inputCep.value = value;
-        const regex = /^\d{8}$/;
-        if (regex.test(inputCep.value)) {
-            camposPreValidados |= FLAGS.cepValido;
-            console.log('Cep válido');
+        const regexCep = /^\d{8}$/;
+        if (regexCep.test(inputCep.value)) {
+            fetch(`https://viacep.com.br/ws/${inputCep.value}/json/`)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((json) => {
+                    console.log(json);
+                    if (!json.erro) {
+                        inputEndereco.value = json.logradouro;
+                        inputEndereco.value = inputEndereco.value.toUpperCase();
+                        inputBairro.value = json.bairro;
+                        inputBairro.value = inputBairro.value.toUpperCase();
+                        inputCidade.value = json.localidade;
+                        inputCidade.value = inputCidade.value.toUpperCase();
+                        inputEstado.value = json.estado;
+                        inputEstado.value = inputEstado.value.toUpperCase();
+                        camposPreValidados |= FLAGS.cepValido;
+                    } else {
+                        mensagem.innerHTML = 'Cep inválido, ou inexistente!';
+                        camposPreValidados &= ~FLAGS.cepValido;
+                    }
+                })
+                .catch((erro) => {
+                    mensagem.innerHTML = 'Cep inválido, ou inexistente!';
+                    camposPreValidados &= ~FLAGS.cepValido;
+                });
         } else {
             console.log('Cep inválido');
             mensagem.innerHTML = 'Cep inválido, deve conter 8 números';
@@ -161,97 +141,112 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    inputCep.addEventListener('blur', () => {
-        if (!(camposPreValidados & FLAGS.cepValido)) { return; }
-        fetch(`https://viacep.com.br/ws/${inputCep.value}/json/`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((json) => {
-                console.log(json);
-                if (!json.erro) {
-                    inputEndereco.value = json.logradouro;
-                    inputEndereco.value = inputEndereco.value.toUpperCase();
-                    inputBairro.value = json.bairro;
-                    inputBairro.value = inputBairro.value.toUpperCase();
-                    inputCidade.value = json.localidade;
-                    inputCidade.value = inputCidade.value.toUpperCase();
-                    inputEstado.value = json.estado;
-                    inputEstado.value = inputEstado.value.toUpperCase();
-                    camposPreValidados |= FLAGS.cepValido;
-                } else {
-                    mensagem.innerHTML = 'Cep inválido, ou inexistente!';
-                    camposPreValidados &= ~FLAGS.cepValido;
-                }
-            })
-            .catch((erro) => {
-                mensagem.innerHTML = 'Cep inválido, ou inexistente!';
-                camposPreValidados &= ~FLAGS.cepValido;
-            });
-    });
-
     inputEndereco.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite o número da residência';
-    });
-
-    inputEndereco.addEventListener('blur', () => {
-        const regex = /(^|[^\w])\d+([^\w]|$)/;
-        if (regex.test(inputEndereco.value)) {
-            camposPreValidados |= FLAGS.enderecoValido;
-        } else {
-            mensagem.innerHTML = 'Digite o número da residência';
-            camposPreValidados &= ~FLAGS.enderecoValido;
-        }
     });
 
     inputSenha.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite a senha desejada com no mínimo de 8 caracteres, sendo pelo menos 1 especial e 1 numérico';
     });
 
-    inputSenha.addEventListener('blur', () => {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (regex.test(inputSenha.value)) {
-            camposPreValidados |= FLAGS.senhaValida;
-        } else {
-            mensagem.innerHTML = 'Digite a senha desejada com no mínimo de 8 caracteres, sendo pelo menos 1 especial e 1 numérico';
-            camposPreValidados &= ~FLAGS.senhaValida;
-        }
-    });
-
     inputSenhaConfirmada.addEventListener('focus', () => {
         mensagem.innerHTML = 'Repita a mesma senha para confirmar';
-    });
-
-    inputSenhaConfirmada.addEventListener('blur', () => {
-        if (inputSenhaConfirmada.value === inputSenha.value) {
-            camposPreValidados |= FLAGS.senhaConfirmadaValida;
-        } else {
-            mensagem.innerHTML = 'Senhas inválidas, são diferentes';
-            camposPreValidados &= ~FLAGS.senhaConfirmadaValida;
-        }
     });
 
     inputRendaMensal.addEventListener('focus', () => {
         mensagem.innerHTML = 'Digite sua renda mensal';
     });
 
-    inputRendaMensal.addEventListener('blur', () => {
-        const regex = /^\d+(\.\d{1,2})?$/;
-        if (regex.test(inputRendaMensal.value)) {
+    // Quando o formulário é enviado (botão clicado)
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede o comportamento padrão do formulário
+
+        // Valida o nome completo
+        const regexNomeCompleto = /^.{30,80}$/;
+        if (regexNomeCompleto.test(inputNomeCompleto.value)) {
+            inputNomeCompleto.value = inputNomeCompleto.value.toUpperCase();
+            camposPreValidados |= FLAGS.nomeCompletoValido;
+        } else {
+            mensagem.innerHTML = 'Digite o seu nome completo entre 30 e 80 caracteres';
+            camposPreValidados &= ~FLAGS.nomeCompletoValido;
+        }
+
+        // Valida o e-mail
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (regexEmail.test(inputEmail.value)) {
+            inputEmail.value = inputEmail.value.toUpperCase();
+            camposPreValidados |= FLAGS.emailValido;
+        } else {
+            mensagem.innerHTML = 'Digite o seu e-mail no formato email@exemplo.com.br';
+            camposPreValidados &= ~FLAGS.emailValido;
+        }
+
+        // Valida a data de nascimento
+        const regexDataNascimento = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+        if (regexDataNascimento.test(inputDataNascimento.value)) {
+            camposPreValidados |= FLAGS.dataNascimentoValida;
+        } else {
+            mensagem.innerHTML = 'Digite a sua data de nascimento com DD/MM/AAAA';
+            camposPreValidados &= ~FLAGS.dataNascimentoValida;
+        }
+
+        // Valida o CPF
+        if (validarCPF(inputCpf.value)) {
+            camposPreValidados |= FLAGS.cpfValido;
+        } else {
+            mensagem.innerHTML = 'Digite o seu CPF no formato 99999999999';
+            camposPreValidados &= ~FLAGS.cpfValido;
+        }
+
+        // Valida o RG
+        const regexRg = /^\d{8}[0-9A-Za-z]$/;
+        if (regexRg.test(inputRg.value)) {
+            camposPreValidados |= FLAGS.rgValido;
+        } else {
+            mensagem.innerHTML = 'Digite o seu RG no formato 999999999';
+            camposPreValidados &= ~FLAGS.rgValido;
+        }
+
+        // Valida o endereço com número
+        const regexEndereco = /(^|[^\w])\d+([^\w]|$)/;
+        if (regexEndereco.test(inputEndereco.value)) {
+            camposPreValidados |= FLAGS.enderecoValido;
+        } else {
+            mensagem.innerHTML = 'Digite o número da residência';
+            camposPreValidados &= ~FLAGS.enderecoValido;
+        }
+
+        // Valida a senha
+        const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (regexSenha.test(inputSenha.value)) {
+            camposPreValidados |= FLAGS.senhaValida;
+        } else {
+            mensagem.innerHTML = 'Digite a senha desejada com no mínimo de 8 caracteres, sendo pelo menos 1 especial e 1 numérico';
+            camposPreValidados &= ~FLAGS.senhaValida;
+        }
+
+        // Valida a senha confirmada
+        if (inputSenhaConfirmada.value === inputSenha.value) {
+            camposPreValidados |= FLAGS.senhaConfirmadaValida;
+        } else {
+            mensagem.innerHTML = 'Senhas inválidas, são diferentes';
+            camposPreValidados &= ~FLAGS.senhaConfirmadaValida;
+        }
+
+        // Valida a renda mensal
+        const regexRendaMensal = /^\d+(\.\d{1,2})?$/;
+        if (regexRendaMensal.test(inputRendaMensal.value)) {
             camposPreValidados |= FLAGS.rendaMensalValida;
         } else {
             mensagem.innerHTML = 'Renda inválida';
             camposPreValidados &= ~FLAGS.rendaMensalValida;
         }
-    });
 
-    // Quando o formulário é enviado (botão clicado)
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Impede o comportamento padrão do formulário
 
         // verifica se todos os campos foram validados antes de submeter
-        if (!(camposPreValidados & (FLAGS.cepValido | FLAGS.cpfValido | FLAGS.dataNascimentoValida | FLAGS.emailValido | FLAGS.enderecoValido | FLAGS.nomeCompletoValido | FLAGS.rendaMensalValida | FLAGS.rgValido | FLAGS.senhaConfirmadaValida | FLAGS.senhaValida)) === (FLAGS.cepValido | FLAGS.cpfValido | FLAGS.dataNascimentoValida | FLAGS.emailValido | FLAGS.enderecoValido | FLAGS.nomeCompletoValido | FLAGS.rendaMensalValida | FLAGS.rgValido | FLAGS.senhaConfirmadaValida | FLAGS.senhaValida)) {
+        if ((camposPreValidados & CAMPOS_OBRIGATORIOS) !== CAMPOS_OBRIGATORIOS) {
             console.log('Campos Inválidos!');
+            mensagem.innerHTML = 'Existem campos inválidos no formulário';
             return;
         } else {
             console.log('Campos Válidos!');
@@ -261,12 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnCadastrar.disabled) {
             return;
         }
-        
+
         try {
             // Desabilita o botão e muda o texto para indicar que está processando
             btnCadastrar.disabled = true;
             btnCadastrar.textContent = 'Cadastrando...';
-            
+
             // Coleta os dados do formulário
             const formData = new FormData(form);
             const data = {

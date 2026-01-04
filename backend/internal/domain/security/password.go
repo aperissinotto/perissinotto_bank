@@ -18,7 +18,7 @@ func HashSenha(senhaAberta string) (string, bool) {
 	return string(hash), true
 }
 
-func CompararSenha(senhaAberta, senhaHash string) bool {
+func CompararSenha(senhaAberta string, senhaHash string) bool {
 	log.Println(senhaAberta)
 	log.Println(senhaHash)
 	err := bcrypt.CompareHashAndPassword(

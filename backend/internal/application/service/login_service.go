@@ -17,7 +17,7 @@ func NewLoginService(r repository.ClienteRepository) *LoginService {
 	return &LoginService{repoCliente: r}
 }
 
-func (s *LoginService) Login(cpf, senhaAberta string) (*entity.Cliente, error) {
+func (s *LoginService) Login(cpf string, senhaAberta string) (*entity.Cliente, error) {
 	c, err := s.repoCliente.BuscarClientePorCpf(cpf)
 	if err != nil {
 		log.Println(err)

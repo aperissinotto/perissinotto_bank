@@ -8,19 +8,20 @@ import (
 	"github.com/aperissinotto/perissinotto_bank/internal/application/service"
 )
 
-type Handler struct {
-	auth *service.AuthService
+type LoginHandler struct {
+	auth *service.LoginService
 }
 
-func NewHandler(auth *service.AuthService) *Handler {
-	return &Handler{auth: auth}
+func NewLoginHandler(auth *service.LoginService) *LoginHandler {
+	return &LoginHandler{auth: auth}
 }
 
-func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var req dto.LoginRequest
 	json.NewDecoder(r.Body).Decode(&req)
 
-	_, err := h.auth.Login(req.Agencia, req.Conta, req.Senha)
+	_, err := h.auth.Login(req.Cpf, req.Senha)
+
 	if err != nil {
 		http.Error(w, "Credenciais inválidas", http.StatusUnauthorized)
 		return

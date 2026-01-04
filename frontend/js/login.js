@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.form'); // O formulário
     const btnEntrar = document.querySelector('#submit'); // Botão de envio
     const mensagem = document.querySelector('.mensagem'); // Área de mensagens
-    const inputAgencia = document.querySelector('#agencia'); // Campo de agência
-    const inputConta = document.querySelector('#conta'); // Campo de conta
+    const inputCpf = document.querySelector('#cpf'); // Campo de agência
     const inputSenha = document.querySelector('#senha'); // Campo de senha
 
     // Quando a página termina de carregar completamente, coloca o foco no campo de agência
@@ -13,33 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
         inputAgencia.focus();
     });
 
-    // Quando o campo de agência recebe foco (clique), exibe uma mensagem de ajuda
-    inputAgencia.addEventListener('focus', () => {
-        mensagem.innerHTML = 'Digite o número da agência da sua conta';
+    // Quando o campo de cpf recebe foco (clique), exibe uma mensagem de ajuda
+    inputCpf.addEventListener('focus', () => {
+        mensagem.innerHTML = 'Digite o número do seu cpf';
     });
 
-    // Quando o campo de agência recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
-    inputAgencia.addEventListener('input', () => {
-        const regex = /^[0-9]*$/;
-        if (!regex.test(agencia.value)) {
-            mensagem.innerHTML = 'Agência inválida, só pode conter números!';
+    // Quando o campo de cpf recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
+    inputCpf.addEventListener('input', () => {
+        let value = inputCpf.value.replace(/\D/g, ""); // remove tudo que não for número
+        inputCpf.value = value;
+        const regexCpf = /^\d{11}$/;
+        if (!regexCpf.test(inputCpf.value)) {
+            mensagem.innerHTML = 'CPF inválido!';
         } else {
-            mensagem.innerHTML = 'Digite o número da agência da sua conta';
-        }
-    });
-
-    // Quando o campo de conta recebe foco, exibe uma mensagem de ajuda
-    inputConta.addEventListener('focus', () => {
-        mensagem.innerHTML = 'Digite o número da sua conta';
-    });
-
-    // Quando o campo de conta recebe dados (input), valida o contéudo e exibe uma mensagem de ajuda
-    inputConta.addEventListener('input', () => {
-        const regex = /^[0-9]*$/;
-        if (!regex.test(conta.value)) {
-            mensagem.innerHTML = 'Conta inválida, só pode conter números!';
-        } else {
-            mensagem.innerHTML = 'Digite o número da sua conta';
+            mensagem.innerHTML = 'CPF válido';
         }
     });
 
@@ -65,8 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Coleta os dados do formulário
             const formData = new FormData(form);
             const data = {
-                agencia: formData.get('agencia'),
-                conta: formData.get('conta'),
+                cpf: formData.get('cpf'),
                 senha: formData.get('senha')
             };
 

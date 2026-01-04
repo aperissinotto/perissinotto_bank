@@ -3,6 +3,7 @@ package repository
 import "github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 
 type ContaRepository interface {
-	BuscarPorAgenciaConta(agencia, conta string) (*entity.Conta, error)
-	Criar(conta *entity.Conta) error
+	CriarConta(conta *entity.Conta) error
+	BuscarContasPorCpf(cpf string) ([]entity.Conta, error)
+	BuscarContaPorId(id string) (*entity.Conta, error)
 }

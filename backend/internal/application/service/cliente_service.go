@@ -6,6 +6,7 @@ import (
 	"github.com/aperissinotto/perissinotto_bank/internal/application/dto"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/repository"
+	"github.com/aperissinotto/perissinotto_bank/internal/domain/security"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/validation"
 )
 
@@ -23,6 +24,11 @@ func (s *ClienteService) CriarCliente(req dto.CriarClienteRequest) (*entity.Clie
 		return nil, errors.New("CPF inválido")
 	}
 
+	hash, res := security.HashSenha(req.Senha)
+	if !res {
+		return nil, errors.New("erro ao processar senha")
+	}
+
 	cliente := &entity.Cliente{
 		NomeCompleto:   req.NomeCompleto,
 		Email:          req.Email,
@@ -35,21 +41,16 @@ func (s *ClienteService) CriarCliente(req dto.CriarClienteRequest) (*entity.Clie
 		Cidade:         req.Cidade,
 		Estado:         req.Estado,
 		RendaMensal:    req.RendaMensal,
+		SenhaHash:      hash,
 	}
 
-	// aqui entram regras de negócio:
-	// - validar CPF
-	// - validar idade
-	// - hash da senha
-	// - gerar ID
-
-	if err := s.repo.Criar(cliente); err != nil {
+	if err := s.repo.CriarCliente(cliente); err != nil {
 		return nil, err
 	}
 
 	return cliente, nil
 }
 
-func (s *ClienteService) BuscarCliente(id string) (*entity.Cliente, error) {
-	return s.repo.BuscarPorID(id)
+func (s *ClienteService) BuscarClientePorCpf(cpf string) (*entity.Cliente, error) {
+	return s.repo.BuscarClientePorCpf(cpf)
 }

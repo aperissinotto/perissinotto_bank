@@ -1,8 +1,9 @@
 package entity
 
+import "github.com/google/uuid"
+
 type Conta struct {
-	ID      string
-	Agencia string
-	Conta   string
-	Senha   string
+	ID        uuid.UUID
+	CPF       string
+	Descricao string
 }

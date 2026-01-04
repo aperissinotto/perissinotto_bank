@@ -14,11 +14,11 @@ func NewClienteRepository(db *sql.DB) *ClienteRepositoryPostgres {
 	return &ClienteRepositoryPostgres{db: db}
 }
 
-func (r *ClienteRepositoryPostgres) Criar(c *entity.Cliente) error {
+func (r *ClienteRepositoryPostgres) CriarCliente(c *entity.Cliente) error {
 	query := `
 		INSERT INTO clientes 
-		(nome_completo, email, data_nascimento, cpf, rg, cep, endereco, bairro, cidade, estado, renda_mensal)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+		(nome_completo, email, data_nascimento, cpf, rg, cep, endereco, bairro, cidade, estado, renda_mensal, senha_hash)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
 		RETURNING id
 	`
 	return r.db.QueryRow(
@@ -34,21 +34,22 @@ func (r *ClienteRepositoryPostgres) Criar(c *entity.Cliente) error {
 		c.Cidade,
 		c.Estado,
 		c.RendaMensal,
+		c.SenhaHash,
 	).Scan(&c.ID)
 }
 
-func (r *ClienteRepositoryPostgres) BuscarPorID(id string) (*entity.Cliente, error) {
+func (r *ClienteRepositoryPostgres) BuscarClientePorCpf(cpf string) (*entity.Cliente, error) {
 	var c entity.Cliente
 
 	err := r.db.QueryRow(`
 		SELECT id, nome_completo, email, data_nascimento, cpf, rg,
-		       cep, endereco, bairro, cidade, estado, renda_mensal
+		       cep, endereco, bairro, cidade, estado, renda_mensal, senha_hash
 		FROM clientes
-		WHERE id = $1
-	`, id).Scan(
+		WHERE cpf = $1
+	`, cpf).Scan(
 		&c.ID, &c.NomeCompleto, &c.Email, &c.DataNascimento,
 		&c.CPF, &c.RG, &c.CEP, &c.Endereco,
-		&c.Bairro, &c.Cidade, &c.Estado, &c.RendaMensal,
+		&c.Bairro, &c.Cidade, &c.Estado, &c.RendaMensal, &c.SenhaHash,
 	)
 
 	return &c, err

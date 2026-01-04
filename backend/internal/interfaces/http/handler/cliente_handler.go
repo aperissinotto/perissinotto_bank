@@ -63,10 +63,10 @@ func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func (h *ClienteHandler) BuscarCliente(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+func (h *ClienteHandler) BuscarClientePorCpf(w http.ResponseWriter, r *http.Request) {
+	cpf := r.URL.Query().Get("cpf")
 
-	cliente, err := h.service.BuscarCliente(id)
+	cliente, err := h.service.BuscarClientePorCpf(cpf)
 	if err != nil {
 		http.Error(w, "Cliente não encontrado", http.StatusNotFound)
 		return

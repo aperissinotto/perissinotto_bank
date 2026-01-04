@@ -20,13 +20,16 @@ func main() {
 
 	// Services
 	clienteService := service.NewClienteService(clienteRepo)
+	loginService := service.NewLoginService(clienteRepo)
 
 	// Handlers
 	clienteHandler := handler.NewClienteHandler(clienteService)
+	loginHandler := handler.NewLoginHandler(loginService)
 
 	// Router
 	router := httpRouter.NewRouter(
 		clienteHandler,
+		loginHandler,
 	)
 
 	log.Println("Servidor rodando na porta 8080")

@@ -15,4 +15,5 @@ type Cliente struct {
 	Cidade         string
 	Estado         string
 	RendaMensal    float64
+	SenhaHash      string
 }

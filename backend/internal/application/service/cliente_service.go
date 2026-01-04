@@ -24,6 +24,10 @@ func (s *ClienteService) CriarCliente(req dto.CriarClienteRequest) (*entity.Clie
 		return nil, errors.New("CPF inválido")
 	}
 
+	if !validation.ValidarSenha(req.Senha) {
+		return nil, errors.New("Senha inválida")
+	}
+
 	hash, res := security.HashSenha(req.Senha)
 	if !res {
 		return nil, errors.New("erro ao processar senha")

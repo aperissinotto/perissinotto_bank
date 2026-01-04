@@ -4,6 +4,6 @@ import "github.com/google/uuid"
 
 type Conta struct {
 	ID        uuid.UUID
-	CPF       string
+	ClienteId uuid.UUID
 	Descricao string
 }

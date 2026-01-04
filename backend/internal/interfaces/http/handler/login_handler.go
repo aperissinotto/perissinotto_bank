@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/aperissinotto/perissinotto_bank/internal/application/dto"
@@ -24,8 +23,12 @@ func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	_, err := h.auth.Login(req.Cpf, req.Senha)
 
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "003-Credenciais inválidas", http.StatusUnauthorized)
+		writeError(
+			w,
+			http.StatusUnauthorized,
+			"CPF ou Senha inválidos!",
+			err.Error(),
+		)
 		return
 	}
 

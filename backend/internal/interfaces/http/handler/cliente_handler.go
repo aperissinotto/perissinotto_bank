@@ -69,7 +69,12 @@ func (h *ClienteHandler) BuscarClientePorCpf(w http.ResponseWriter, r *http.Requ
 
 	cliente, err := h.service.BuscarClientePorCpf(cpf)
 	if err != nil {
-		http.Error(w, "Cliente não encontrado", http.StatusNotFound)
+		writeError(
+			w,
+			http.StatusNotFound,
+			"Cliente não cadastrado!",
+			err.Error(),
+		)
 		return
 	}
 

@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/aperissinotto/perissinotto_bank/internal/application/dto"
 	"github.com/aperissinotto/perissinotto_bank/internal/application/service"
@@ -19,7 +20,7 @@ func NewClienteHandler(s *service.ClienteService) *ClienteHandler {
 func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	var req dto.CriarClienteRequest
 
-	if r.Header.Get("Content-Type") != "application/json" {
+	if !strings.Contains(r.Header.Get("Content-Type"), "application/json") {
 		writeError(
 			w,
 			http.StatusUnsupportedMediaType,
@@ -72,5 +73,6 @@ func (h *ClienteHandler) BuscarClientePorCpf(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	json.NewEncoder(w).Encode(cliente)
+	resp := dto.ClienteFromEntity(cliente)
+	json.NewEncoder(w).Encode(resp)
 }

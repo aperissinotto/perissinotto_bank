@@ -24,7 +24,9 @@
                 </div>
                 <div class="field">
                     <label>Senha</label>
-                    <input type="password" name="senha" id="senha" placeholder="Senha" required>
+                    <input type="password" name="senha" id="senha" title="Digite a sua senha"
+                        placeholder="Digite a sua senha" minlength="8"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required>
                 </div>
                 <button class="button" type="submit" id="submit">Entrar</button>
             </form>

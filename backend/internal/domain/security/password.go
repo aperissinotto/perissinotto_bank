@@ -7,6 +7,7 @@ import (
 )
 
 func HashSenha(senhaAberta string) (string, bool) {
+	log.Printf("senha aberta (len=%d): '%s'\n", len(senhaAberta), senhaAberta)
 	hash, err := bcrypt.GenerateFromPassword(
 		[]byte(senhaAberta),
 		bcrypt.DefaultCost,
@@ -19,8 +20,7 @@ func HashSenha(senhaAberta string) (string, bool) {
 }
 
 func CompararSenha(senhaAberta string, senhaHash string) bool {
-	log.Println(senhaAberta)
-	log.Println(senhaHash)
+	log.Printf("senha aberta (len=%d): '%s'\n", len(senhaAberta), senhaAberta)
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(senhaHash),
 		[]byte(senhaAberta),

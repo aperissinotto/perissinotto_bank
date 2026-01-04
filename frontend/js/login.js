@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Quando a página termina de carregar completamente, coloca o foco no campo de agência
     window.addEventListener('load', () => {
-        inputAgencia.focus();
+        inputCpf.focus();
     });
 
     // Quando o campo de cpf recebe foco (clique), exibe uma mensagem de ajuda
@@ -37,6 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Quando o formulário é enviado (botão clicado)
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Impede o comportamento padrão do formulário
+
+        // Valida a senha
+        const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!(regexSenha.test(inputSenha.value))) {
+            mensagem.innerHTML = 'Digite a sua senha';
+            return;
+        }
 
         // Se o botão já está desabilitado, não faz nada (evita múltiplos cliques)
         if (btnEntrar.disabled) {

@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"log"
 
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/repository"
@@ -19,12 +20,13 @@ func NewLoginService(r repository.ClienteRepository) *LoginService {
 func (s *LoginService) Login(cpf, senhaAberta string) (*entity.Cliente, error) {
 	c, err := s.repoCliente.BuscarClientePorCpf(cpf)
 	if err != nil {
-		return nil, errors.New("credenciais inválidas")
+		log.Println(err)
+		return nil, errors.New("001-credenciais inválidas")
 	}
 
 	res := security.CompararSenha(senhaAberta, c.SenhaHash)
 	if !res {
-		return nil, errors.New("credenciais inválidas")
+		return nil, errors.New("002-credenciais inválidas")
 	}
 
 	return c, nil

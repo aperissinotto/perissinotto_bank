@@ -2,11 +2,9 @@ package service
 
 import (
 	"errors"
-	"log"
 
-	"github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/repository"
-	"github.com/aperissinotto/perissinotto_bank/internal/domain/security"
+	"github.com/aperissinotto/perissinotto_bank/internal/infrastructure/auth"
 )
 
 type LoginService struct {
@@ -17,17 +15,21 @@ func NewLoginService(r repository.ClienteRepository) *LoginService {
 	return &LoginService{repoCliente: r}
 }
 
-func (s *LoginService) Login(cpf string, senhaAberta string) (*entity.Cliente, error) {
+func (s *LoginService) Login(cpf string, senhaAberta string) (string, error) {
 	c, err := s.repoCliente.BuscarClientePorCpf(cpf)
 	if err != nil {
-		log.Println(err)
-		return nil, errors.New("001-credenciais inválidas")
+		return "", errors.New("001-credenciais inválidas")
 	}
 
-	res := security.CompararSenha(senhaAberta, c.SenhaHash)
+	res := auth.CompararSenha(senhaAberta, c.SenhaHash)
 	if !res {
-		return nil, errors.New("002-credenciais inválidas")
+		return "", errors.New("002-credenciais inválidas")
 	}
 
-	return c, nil
+	token, err := auth.GerarToken(c.ID.String(), c.CPF)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }

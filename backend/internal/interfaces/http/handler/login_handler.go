@@ -18,12 +18,21 @@ func NewLoginHandler(auth *service.LoginService) *LoginHandler {
 
 func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var req dto.LoginRequest
-	json.NewDecoder(r.Body).Decode(&req)
+	res := json.NewDecoder(r.Body).Decode(&req)
+	if res != nil {
+		WriteError(
+			w,
+			http.StatusUnauthorized,
+			"JSON inválido!",
+			res.Error(),
+		)
+		return
+	}
 
-	_, err := h.auth.Login(req.Cpf, req.Senha)
+	token, err := h.auth.Login(req.Cpf, req.Senha)
 
 	if err != nil {
-		writeError(
+		WriteError(
 			w,
 			http.StatusUnauthorized,
 			"CPF ou Senha inválidos!",
@@ -32,6 +41,16 @@ func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   7200,
+	})
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message":"login ok"}`))
+	w.Write([]byte(`{"message":"login realizado com sucesso"}`))
 }

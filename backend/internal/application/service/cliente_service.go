@@ -6,8 +6,8 @@ import (
 	"github.com/aperissinotto/perissinotto_bank/internal/application/dto"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/entity"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/repository"
-	"github.com/aperissinotto/perissinotto_bank/internal/domain/security"
 	"github.com/aperissinotto/perissinotto_bank/internal/domain/validation"
+	"github.com/aperissinotto/perissinotto_bank/internal/infrastructure/auth"
 )
 
 type ClienteService struct {
@@ -28,7 +28,7 @@ func (s *ClienteService) CriarCliente(req dto.CriarClienteRequest) (*entity.Clie
 		return nil, errors.New("Senha inválida")
 	}
 
-	hash, res := security.HashSenha(req.Senha)
+	hash, res := auth.HashSenha(req.Senha)
 	if !res {
 		return nil, errors.New("erro ao processar senha")
 	}

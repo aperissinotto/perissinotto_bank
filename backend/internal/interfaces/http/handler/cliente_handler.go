@@ -21,7 +21,7 @@ func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	var req dto.CriarClienteRequest
 
 	if !strings.Contains(r.Header.Get("Content-Type"), "application/json") {
-		writeError(
+		WriteError(
 			w,
 			http.StatusUnsupportedMediaType,
 			"Content-Type deve ser application/json",
@@ -31,7 +31,7 @@ func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeError(
+		WriteError(
 			w,
 			http.StatusBadRequest,
 			"JSON inválido",
@@ -43,7 +43,7 @@ func (h *ClienteHandler) CriarCliente(w http.ResponseWriter, r *http.Request) {
 	cliente, err := h.service.CriarCliente(req)
 
 	if err != nil {
-		writeError(
+		WriteError(
 			w,
 			http.StatusInternalServerError,
 			"Erro ao criar cliente",
@@ -69,7 +69,7 @@ func (h *ClienteHandler) BuscarClientePorCpf(w http.ResponseWriter, r *http.Requ
 
 	cliente, err := h.service.BuscarClientePorCpf(cpf)
 	if err != nil {
-		writeError(
+		WriteError(
 			w,
 			http.StatusNotFound,
 			"Cliente não cadastrado!",
